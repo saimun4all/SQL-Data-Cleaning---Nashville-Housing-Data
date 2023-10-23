@@ -47,3 +47,27 @@ JOIN PortfolioProject.dbo.[Nashville Housing] b
 	ON a.ParcelID = b.ParcelID
 	AND a.[UniqueID ] <> b.[UniqueID ]
 WHERE a.PropertyAddress IS NULL
+
+
+------------------------------------------------------------------------------------------------------
+--- Breaking out Address into Individual Columns (Address, City, State)
+
+SELECT
+	SUBSTRING(PropertyAddress, 1, CHARINDEX(',', PropertyAddress) - 1) AS Address,
+	SUBSTRING(PropertyAddress, CHARINDEX(',', PropertyAddress) + 1, LEN(PropertyAddress)) AS Address
+FROM PortfolioProject.dbo.[Nashville Housing]
+
+ALTER TABLE PortfolioProject.dbo.[Nashville Housing]
+Add PropertySplitAddress Nvarchar(255);
+
+Update PortfolioProject.dbo.[Nashville Housing]
+SET PropertySplitAddress = SUBSTRING(PropertyAddress, 1, CHARINDEX(',', PropertyAddress) - 1)
+
+ALTER TABLE PortfolioProject.dbo.[Nashville Housing]
+Add PropertySplitCity Nvarchar(255);
+
+Update PortfolioProject.dbo.[Nashville Housing]
+SET PropertySplitCity = SUBSTRING(PropertyAddress, CHARINDEX(',', PropertyAddress) + 1, LEN(PropertyAddress))
+
+SELECT *
+FROM PortfolioProject.dbo.[Nashville Housing]
