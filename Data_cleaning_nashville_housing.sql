@@ -20,3 +20,30 @@ Update PortfolioProject.dbo.[Nashville Housing]
 SET SaleDateConverted = CONVERT(Date,SaleDate)
 
 
+------------------------------------------------------------------------------------------------------
+--- Populate Property Address data
+
+SELECT *
+FROM PortfolioProject.dbo.[Nashville Housing]
+WHERE PropertyAddress IS NULL
+ORDER BY ParcelID
+
+SELECT 
+	a.ParcelID, 
+	a.PropertyAddress, 
+	b.ParcelID, 
+	b.PropertyAddress,
+	ISNULL(a.PropertyAddress,b.PropertyAddress)
+FROM PortfolioProject.dbo.[Nashville Housing] a
+JOIN PortfolioProject.dbo.[Nashville Housing] b
+	ON a.ParcelID = b.ParcelID
+	AND a.[UniqueID ] <> b.[UniqueID ]
+WHERE a.PropertyAddress IS NULL
+
+UPDATE a
+SET PropertyAddress = ISNULL(a.PropertyAddress,b.PropertyAddress)
+FROM PortfolioProject.dbo.[Nashville Housing] a
+JOIN PortfolioProject.dbo.[Nashville Housing] b
+	ON a.ParcelID = b.ParcelID
+	AND a.[UniqueID ] <> b.[UniqueID ]
+WHERE a.PropertyAddress IS NULL
