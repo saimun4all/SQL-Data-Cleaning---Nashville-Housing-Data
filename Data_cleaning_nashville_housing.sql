@@ -75,6 +75,49 @@ FROM PortfolioProject.dbo.[Nashville Housing]
 ------------------------------------------------------------------------------------------------------
 --- Split Owner Address into (Address, City, State)
 
-SELECT OwnerAddress
+SELECT 
+PARSENAME(REPLACE(OwnerAddress, ',' , '.'), 3),
+PARSENAME(REPLACE(OwnerAddress, ',' , '.'), 2),
+PARSENAME(REPLACE(OwnerAddress, ',' , '.'), 1)
 FROM PortfolioProject.dbo.[Nashville Housing]
 
+ALTER TABLE PortfolioProject.dbo.[Nashville Housing]
+Add OwnerSplitAddress Nvarchar(255);
+
+Update PortfolioProject.dbo.[Nashville Housing]
+SET OwnerSplitAddress = PARSENAME(REPLACE(OwnerAddress, ',' , '.'), 3)
+
+ALTER TABLE PortfolioProject.dbo.[Nashville Housing]
+Add OwnerSplitCity Nvarchar(255);
+
+Update PortfolioProject.dbo.[Nashville Housing]
+SET OwnerSplitCity = PARSENAME(REPLACE(OwnerAddress, ',' , '.'), 2)
+
+ALTER TABLE PortfolioProject.dbo.[Nashville Housing]
+Add OwnerSplitState Nvarchar(255);
+
+Update PortfolioProject.dbo.[Nashville Housing]
+SET OwnerSplitState = PARSENAME(REPLACE(OwnerAddress, ',' , '.'), 1)
+
+
+------------------------------------------------------------------------------------------------------
+--- Change Y and N to Yes and No in "Sold as Vacant" field
+
+SELECT DISTINCT(SoldAsVacant), COUNT(SoldAsVacant)
+FROM PortfolioProject.dbo.[Nashville Housing]
+GROUP BY SoldAsVacant
+ORDER BY 2
+
+SELECT SoldASVacant,
+CASE WHEN SoldAsVacant = 'Y' THEN 'Yes'
+	 WHEN SoldAsVacant = 'N' THEN 'No'
+	ELSE SoldAsVacant
+	END
+FROM PortfolioProject.dbo.[Nashville Housing]
+
+UPDATE PortfolioProject.dbo.[Nashville Housing]
+SET SoldAsVacant = CASE WHEN SoldAsVacant = 'Y' THEN 'Yes'
+	 WHEN SoldAsVacant = 'N' THEN 'No'
+	ELSE SoldAsVacant
+	END
+FROM PortfolioProject.dbo.[Nashville Housing]
