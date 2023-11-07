@@ -71,3 +71,10 @@ SET PropertySplitCity = SUBSTRING(PropertyAddress, CHARINDEX(',', PropertyAddres
 
 SELECT *
 FROM PortfolioProject.dbo.[Nashville Housing]
+
+------------------------------------------------------------------------------------------------------
+--- Split Owner Address into (Address, City, State)
+
+SELECT OwnerAddress
+FROM PortfolioProject.dbo.[Nashville Housing]
+
