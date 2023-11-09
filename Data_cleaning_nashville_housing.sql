@@ -126,6 +126,7 @@ FROM PortfolioProject.dbo.[Nashville Housing]
 ------------------------------------------------------------------------------------------------------
 --- Remove Duplicates
 
+WITH RowNumCTE AS (
 SELECT *,
 	ROW_NUMBER() OVER (
 	PARTITION BY ParcelID,
@@ -137,4 +138,9 @@ SELECT *,
 					UniqueID
 					) row_num
 FROM PortfolioProject.dbo.[Nashville Housing]
-ORDER BY ParcelID
+--ORDER BY ParcelID
+)
+DELETE 
+FROM RowNumCTE
+WHERE row_num > 1
+--ORDER BY PropertyAddress
