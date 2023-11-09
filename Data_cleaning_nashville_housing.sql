@@ -121,3 +121,20 @@ SET SoldAsVacant = CASE WHEN SoldAsVacant = 'Y' THEN 'Yes'
 	ELSE SoldAsVacant
 	END
 FROM PortfolioProject.dbo.[Nashville Housing]
+
+
+------------------------------------------------------------------------------------------------------
+--- Remove Duplicates
+
+SELECT *,
+	ROW_NUMBER() OVER (
+	PARTITION BY ParcelID,
+				PropertyAddress,
+				SalePrice,
+				SaleDate,
+				LegalReference
+				ORDER BY
+					UniqueID
+					) row_num
+FROM PortfolioProject.dbo.[Nashville Housing]
+ORDER BY ParcelID
