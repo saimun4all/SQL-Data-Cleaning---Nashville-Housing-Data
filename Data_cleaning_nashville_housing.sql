@@ -148,3 +148,10 @@ ORDER BY PropertyAddress
 
 ------------------------------------------------------------------------------------------------------
 --- Delete Unused Columns
+
+SELECT *
+FROM 
+PortfolioProject.dbo.[Nashville Housing]
+
+ALTER TABLE PortfolioProject.dbo.[Nashville Housing]
+DROP COLUMN OwnerAddress, TaxDistrict, PropertyAddress 
