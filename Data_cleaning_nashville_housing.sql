@@ -140,7 +140,7 @@ SELECT *,
 FROM PortfolioProject.dbo.[Nashville Housing]
 --ORDER BY ParcelID
 )
-DELETE 
+SELECT *
 FROM RowNumCTE
 WHERE row_num > 1
---ORDER BY PropertyAddress
+ORDER BY PropertyAddress
